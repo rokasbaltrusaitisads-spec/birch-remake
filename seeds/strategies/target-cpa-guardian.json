@@ -1,0 +1,21 @@
+{
+  "name": "Target CPA guardian",
+  "description": "Scale down bids when CPA exceeds the sheet-provided target",
+  "rule": {
+    "name": "Target CPA guardian",
+    "scope": { "level": "campaign", "ids": ["*"] },
+    "schedule": { "cron": "15 * * * *" },
+    "filters": [
+      { "metric": "cpa", "op": ">", "value": 75, "window": "1d" },
+      { "left": "cpa", "op": ">", "right": "sheet.target_cpa" }
+    ],
+    "customMetrics": [
+      { "name": "sheet.target_cpa", "expr": "GOOGLE_SHEETS(targets!B2)" }
+    ],
+    "actions": [
+      { "type": "decrease_budget_pct", "value": 15 },
+      { "type": "notify_slack", "channelId": "alerts", "message": "CPA exceeded targets for ${entity_name}" }
+    ],
+    "dryRun": false
+  }
+}

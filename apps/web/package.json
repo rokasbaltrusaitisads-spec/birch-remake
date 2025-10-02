@@ -1,0 +1,44 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --hostname 0.0.0.0",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.7.17",
+    "@radix-ui/react-slot": "^1.0.4",
+    "@tanstack/react-query": "^4.36.1",
+    "axios": "^1.6.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "lucide-react": "^0.299.0",
+    "next": "14.0.3",
+    "next-auth": "^4.24.5",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.47.0",
+    "tailwind-merge": "^2.0.0",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.39.0",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
+    "@types/node": "20.9.0",
+    "@types/react": "18.2.31",
+    "@types/react-dom": "18.2.14",
+    "@tailwindcss/typography": "^0.5.10",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.5",
+    "eslint": "^8.52.0",
+    "typescript": "5.2.2",
+    "vitest": "^0.34.6"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Cut loss makers",
+  "description": "Pause ad sets when spend is high and ROAS is low",
+  "rule": {
+    "name": "Cut loss makers",
+    "scope": { "level": "ad_set", "ids": ["*"] },
+    "schedule": { "cron": "*/30 * * * *" },
+    "filters": [
+      { "metric": "spend", "op": ">=", "value": 150, "window": "3d" },
+      { "metric": "roas", "op": "<", "value": 1.2, "window": "3d" }
+    ],
+    "customMetrics": [],
+    "actions": [
+      { "type": "pause" },
+      { "type": "notify_email", "to": "team@example.com" }
+    ],
+    "dryRun": false
+  }
+}

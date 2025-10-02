@@ -1,0 +1,44 @@
+{
+  "name": "Birch Remake",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20",
+      "installYarn": "true",
+      "installPnpm": "false"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "installDockerCompose": true
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "postCreateCommand": "npm install -g pnpm@8 && pnpm install",
+  "postStartCommand": "/bin/bash .devcontainer/scripts/start-preview.sh",
+  "forwardPorts": [3000, 3333, 4173],
+  "portsAttributes": {
+    "3000": {
+      "label": "Next.js Web",
+      "onAutoForward": "openBrowser"
+    },
+    "3333": {
+      "label": "NestJS API"
+    },
+    "4173": {
+      "label": "Birch Preview"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.formatOnSave": true
+      },
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "Prisma.prisma"
+      ]
+    },
+    "codespaces": {
+      "openFiles": ["README.md"]
+    }
+  }
+}

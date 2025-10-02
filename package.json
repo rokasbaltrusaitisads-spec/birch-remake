@@ -1,0 +1,19 @@
+{
+  "name": "birch-remake",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@8.10.0",
+  "scripts": {
+    "dev": "pnpm -r --parallel --filter web --filter api run dev",
+    "dev:web": "pnpm --filter web dev",
+    "dev:api": "pnpm --filter api start:dev",
+    "build": "pnpm -r run build",
+    "lint": "pnpm -r run lint",
+    "test": "pnpm -r run test",
+    "test:e2e": "pnpm --filter web test:e2e",
+    "test:api": "pnpm --filter api test:api",
+    "prisma:migrate": "pnpm --filter api prisma migrate dev",
+    "prisma:seed": "pnpm --filter api prisma db seed",
+    "preview": "node scripts/preview-server.mjs"
+  }
+}

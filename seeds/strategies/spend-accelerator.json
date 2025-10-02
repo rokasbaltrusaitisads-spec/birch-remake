@@ -1,0 +1,21 @@
+{
+  "name": "Spend accelerator",
+  "description": "Increase spend on campaigns that are underspending versus targets",
+  "rule": {
+    "name": "Spend accelerator",
+    "scope": { "level": "campaign", "ids": ["*"] },
+    "schedule": { "cron": "*/15 * * * *" },
+    "filters": [
+      { "left": "spend", "op": "<", "right": "sheet.target_spend" },
+      { "metric": "revenue", "op": ">=", "value": 1000, "window": "1d" }
+    ],
+    "customMetrics": [
+      { "name": "sheet.target_spend", "expr": "GOOGLE_SHEETS(targets!B3)" }
+    ],
+    "actions": [
+      { "type": "increase_budget_pct", "value": 10 },
+      { "type": "notify_slack", "channelId": "alerts" }
+    ],
+    "dryRun": false
+  }
+}

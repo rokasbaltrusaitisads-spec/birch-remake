@@ -1,0 +1,23 @@
+{
+  "name": "Scale on strong ROAS",
+  "description": "Increase budgets for ad sets with strong ROAS",
+  "rule": {
+    "name": "Scale on strong ROAS",
+    "scope": { "level": "ad_set", "ids": ["*"] },
+    "schedule": { "cron": "*/15 * * * *" },
+    "filters": [
+      { "metric": "spend", "op": ">=", "value": 100, "window": "1d" },
+      { "metric": "roas", "op": ">=", "value": 2.5, "window": "1d" },
+      { "left": "cpa", "op": "<=", "right": "target_cpa" }
+    ],
+    "customMetrics": [
+      { "name": "target_cpa", "expr": "65" },
+      { "name": "roas", "expr": "revenue/spend" }
+    ],
+    "actions": [
+      { "type": "increase_budget_pct", "value": 20, "cap": 800 },
+      { "type": "notify_slack", "channelId": "marketing", "message": "Scaled ${entity_name}" }
+    ],
+    "dryRun": false
+  }
+}
