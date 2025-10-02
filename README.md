@@ -33,12 +33,23 @@ Copy `.env.example` to `.env` and populate the variables.
 
 ### GitHub Codespaces
 
-Open the repository in [GitHub Codespaces](https://github.com/features/codespaces) to get a ready-to-run workspace. The provided
-devcontainer image installs Node.js, pnpm, and Docker tooling automatically. On the first start it runs `pnpm install` and boots
-the static preview server, forwarding it on port **4173**. Codespaces will open the preview in a browser tab so you can explore
-the mocked Birch experience immediately. Logs for the background preview process live at `.devcontainer/.preview.log`.
+Open the repository in [GitHub Codespaces](https://github.com/features/codespaces) to provision a cloud dev environment with Node
+20, pnpm 8, Docker tooling, and the GitHub CLI already installed. When the container finishes booting it runs `pnpm install` so
+the workspace is ready to go.
 
-The same port mappings also expose the full-stack services (Next.js on 3000, NestJS on 3333) when you launch them manually.
+To start the stack, run a single command in the integrated terminal:
+
+```bash
+pnpm dev
+```
+
+Codespaces will forward the framework defaults (Next.js on **3000**, NestJS on **3333**) and automatically open the Next.js app
+in a browser preview. The optional static preview server is also mapped on **4173**—launch it manually with `pnpm preview` or set
+`AUTO_PREVIEW=1` before the container starts to run it in the background.
+
+Prefer background dev servers right away? Set `AUTO_DEV=1` in your Codespaces configuration or user secrets before opening the
+workspace. The devcontainer will spawn `pnpm dev` in the background and write logs to `/workspaces/.logs/dev.log` (preview logs
+land in `/workspaces/.logs/preview.log`).
 
 ### Zero-Install UI Preview
 
