@@ -31,6 +31,21 @@ pnpm install
 
 Copy `.env.example` to `.env` and populate the variables.
 
+### Zero-Install UI Preview
+
+If you simply want to click through the Birch experience without installing Node, Docker, or pnpm,
+open [`preview/index.html`](preview/index.html) directly in your browser. The static preview bundles
+mocked screenshots of the automation builder, bulk creator, dashboards, and boosting configurator.
+
+Prefer a shareable link? Start the built-in static server:
+
+```bash
+pnpm preview
+```
+
+This serves the preview at [http://localhost:4173](http://localhost:4173) and works even if the API
+and database are offline.
+
 ### Running the Stack Locally
 
 The repository ships with a docker-compose recipe that launches Postgres, Redis, the API, and the web client. In one terminal, run:
@@ -59,9 +74,18 @@ pnpm prisma:seed
 
 ### Tests
 
-- `pnpm test` – run unit tests (Vitest placeholders).
-- `pnpm test:e2e` – run Playwright end-to-end scenarios.
-- `pnpm test:api` – run Supertest-powered API checks.
+The repository ships with Vitest, Playwright, and Supertest harnesses. After installing
+dependencies you can run the full suite with:
+
+```bash
+pnpm test
+```
+
+Or target specific layers:
+
+- `pnpm --filter web test:e2e` – run Playwright end-to-end scenarios.
+- `pnpm --filter api test:api` – execute NestJS HTTP contract checks.
+- `pnpm --filter shared test` – validate the shared rule schemas and DSL fixtures.
 
 ## Documentation
 

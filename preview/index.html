@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Birch Automation Preview</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <div class="hero__content">
+          <p class="badge">Interactive preview</p>
+          <h1>See the Birch automation UX without running the stack</h1>
+          <p class="lead">
+            This lightweight demo mirrors the key screens from the Next.js frontend so you can explore
+            the rule builder, dashboards, bulk creator, and boosting flows right in your browser.
+          </p>
+          <ol class="steps">
+            <li>Open this page locally or via <code>pnpm preview</code>.</li>
+            <li>Use the navigation below to jump between feature areas.</li>
+            <li>Switch between desktop and mobile layouts using your browser dev tools.</li>
+          </ol>
+        </div>
+        <nav class="hero__nav" aria-label="Preview navigation">
+          <a class="nav-link" href="#rules">Automation rules</a>
+          <a class="nav-link" href="#bulk">Bulk ad creation</a>
+          <a class="nav-link" href="#boosting">Post boosting</a>
+          <a class="nav-link" href="#dashboards">Dashboards</a>
+          <a class="nav-link" href="#strategies">Prebuilt strategies</a>
+        </nav>
+      </header>
+
+      <section class="panel" id="rules">
+        <div class="panel__header">
+          <h2>Visual rule builder</h2>
+          <span class="chip">Drag &amp; drop canvas</span>
+        </div>
+        <p>
+          Configure automation scope, schedules, filters, custom metrics, and multi-step actions.
+          The preview uses the same JSON DSL as the live app so you can examine how configurations
+          are stored and executed.
+        </p>
+        <div class="browser-frame">
+          <img src="assets/rule-canvas.svg" alt="Rule builder canvas screenshot" loading="lazy" />
+        </div>
+        <details class="details">
+          <summary>What am I looking at?</summary>
+          <ul>
+            <li>Entity scope selector with account, campaign, ad set, and ad targeting.</li>
+            <li>Metric filters with custom lookbacks and comparisons (ROAS vs prior period).</li>
+            <li>Action stack mixing budget scaling, notifications, and logging.</li>
+            <li>Live JSON preview to inspect and export automation definitions.</li>
+          </ul>
+        </details>
+      </section>
+
+      <section class="panel" id="bulk">
+        <div class="panel__header">
+          <h2>Bulk ad creation matrix</h2>
+          <span class="chip">Macro-ready</span>
+        </div>
+        <p>
+          Generate ads by combining creative assets, audiences, and copy variations. Apply naming
+          macros and automatically attach automations to every generated placement.
+        </p>
+        <div class="browser-frame">
+          <img src="assets/bulk-matrix.svg" alt="Bulk creation matrix screenshot" loading="lazy" />
+        </div>
+      </section>
+
+      <section class="panel" id="boosting">
+        <div class="panel__header">
+          <h2>Post boosting autopilot</h2>
+          <span class="chip">Keeps social proof</span>
+        </div>
+        <p>
+          Review how Birch scans organic posts, evaluates engagement targets, and promotes top
+          performers while preserving existing reactions and comments.
+        </p>
+        <div class="browser-frame">
+          <img src="assets/boosting.svg" alt="Boosting configurator screenshot" loading="lazy" />
+        </div>
+      </section>
+
+      <section class="panel" id="dashboards">
+        <div class="panel__header">
+          <h2>Dashboards &amp; alerts</h2>
+          <span class="chip">Slack-ready</span>
+        </div>
+        <p>
+          Inspect KPIs, top audiences, and recent automation runs. Share lightweight dashboards with
+          stakeholders and subscribe to Slack/email digests.
+        </p>
+        <div class="browser-frame">
+          <img src="assets/dashboard.svg" alt="Dashboard preview screenshot" loading="lazy" />
+        </div>
+      </section>
+
+      <section class="panel" id="strategies">
+        <div class="panel__header">
+          <h2>Strategy templates</h2>
+          <span class="chip">JSON importable</span>
+        </div>
+        <p>
+          Browse the six included strategy blueprints and copy the JSON payloads into the app. The
+          templates cover scaling winners, suppressing poor performers, combating creative fatigue,
+          and broadcasting wins to Slack.
+        </p>
+        <div class="browser-frame browser-frame--code">
+          <pre><code>{
+  "name": "Scale on strong ROAS",
+  "scope": { "level": "ad_set", "ids": ["*"] },
+  "filters": [
+    { "metric": "spend", "op": ">=", "value": 50, "window": "1d" },
+    { "metric": "roas", "op": ">=", "value": 2.2, "window": "1d" }
+  ],
+  "actions": [
+    { "type": "increase_budget_pct", "value": 20, "cap": 500 },
+    { "type": "notify_slack", "channelId": "#growth", "message": "Scaled ${entity_name}" }
+  ]
+}</code></pre>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <p>
+          Want the full experience? Follow the README setup to run the Dockerised stack, connect a
+          Meta sandbox account, and execute rules against sample data.
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>

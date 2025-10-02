@@ -13,6 +13,7 @@
     "test:e2e": "pnpm --filter web test:e2e",
     "test:api": "pnpm --filter api test:api",
     "prisma:migrate": "pnpm --filter api prisma migrate dev",
-    "prisma:seed": "pnpm --filter api prisma db seed"
+    "prisma:seed": "pnpm --filter api prisma db seed",
+    "preview": "node scripts/preview-server.mjs"
   }
 }

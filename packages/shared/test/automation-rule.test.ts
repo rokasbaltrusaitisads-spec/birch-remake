@@ -7,4 +7,10 @@ describe("automationRuleSchema", () => {
     const parsed = automationRuleSchema.parse(defaultRule);
     expect(parsed.name).toEqual("Scale on strong ROAS");
   });
+
+  it("supports multi-action automations", () => {
+    const parsed = automationRuleSchema.parse(defaultRule);
+    expect(parsed.actions).toHaveLength(2);
+    expect(parsed.actions?.map((action) => action.type)).toContain("notify_slack");
+  });
 });
