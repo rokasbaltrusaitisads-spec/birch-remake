@@ -1,0 +1,150 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  password    String?
+  name        String?
+  memberships Membership[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Organisation {
+  id           String        @id @default(cuid())
+  name         String
+  memberships  Membership[]
+  adAccounts   AdAccount[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Membership {
+  id             String        @id @default(cuid())
+  role           Role
+  userId         String
+  organisationId String
+  user           User          @relation(fields: [userId], references: [id])
+  organisation   Organisation  @relation(fields: [organisationId], references: [id])
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  ANALYST
+}
+
+model MetaCredential {
+  id             String   @id @default(cuid())
+  organisationId String
+  accessToken    String
+  refreshToken   String?
+  expiresAt      DateTime?
+  organisation   Organisation @relation(fields: [organisationId], references: [id])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model AdAccount {
+  id             String   @id
+  organisationId String
+  name           String
+  currency       String
+  credentialId   String?
+  organisation   Organisation @relation(fields: [organisationId], references: [id])
+  credential     MetaCredential? @relation(fields: [credentialId], references: [id])
+  rules          Rule[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Rule {
+  id           String        @id @default(cuid())
+  name         String
+  adAccountId  String
+  dsl          Json
+  scheduleCron String
+  active       Boolean      @default(true)
+  adAccount    AdAccount    @relation(fields: [adAccountId], references: [id])
+  versions     RuleVersion[]
+  runs         RuleRun[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model RuleVersion {
+  id        String   @id @default(cuid())
+  ruleId    String
+  dsl       Json
+  createdAt DateTime @default(now())
+  rule      Rule     @relation(fields: [ruleId], references: [id])
+}
+
+model RuleRun {
+  id          String   @id @default(cuid())
+  ruleId      String
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+  status      String
+  log         Json
+  rule        Rule     @relation(fields: [ruleId], references: [id])
+}
+
+model NotificationChannel {
+  id             String   @id @default(cuid())
+  organisationId String
+  type           String
+  config         Json
+  organisation   Organisation @relation(fields: [organisationId], references: [id])
+}
+
+model SheetSource {
+  id             String   @id @default(cuid())
+  organisationId String
+  sheetId        String
+  tabName        String
+  organisation   Organisation @relation(fields: [organisationId], references: [id])
+}
+
+model BulkTemplate {
+  id             String   @id @default(cuid())
+  organisationId String
+  name           String
+  template       Json
+  organisation   Organisation @relation(fields: [organisationId], references: [id])
+  runs           BulkRun[]
+}
+
+model BulkRun {
+  id         String   @id @default(cuid())
+  templateId String
+  status     String
+  result     Json?
+  template   BulkTemplate @relation(fields: [templateId], references: [id])
+  createdAt  DateTime @default(now())
+}
+
+model BoostingConfig {
+  id             String   @id @default(cuid())
+  organisationId String
+  name           String
+  config         Json
+  organisation   Organisation @relation(fields: [organisationId], references: [id])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model PostIdExport {
+  id             String   @id @default(cuid())
+  organisationId String
+  payload        Json
+  organisation   Organisation @relation(fields: [organisationId], references: [id])
+  createdAt      DateTime @default(now())
+}

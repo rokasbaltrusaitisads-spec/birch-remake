@@ -1,0 +1,283 @@
+openapi: 3.1.0
+info:
+  title: Birch Remake API
+  version: 0.1.0
+  description: >-
+    Early contract for the Birch automation backend. Endpoints are subject to change as
+    the scheduler, rules engine, and integrations are implemented.
+servers:
+  - url: http://localhost:3333
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+  /rules:
+    get:
+      summary: List automation rules
+      responses:
+        '200':
+          description: List of rules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AutomationRule'
+    post:
+      summary: Create a rule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AutomationRule'
+      responses:
+        '201':
+          description: Rule created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutomationRule'
+  /rules/{ruleId}/runs:
+    get:
+      summary: List rule runs
+      parameters:
+        - in: path
+          name: ruleId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of run logs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RuleRunLog'
+    post:
+      summary: Trigger a rule run
+      parameters:
+        - in: path
+          name: ruleId
+          required: true
+          schema:
+            type: string
+      responses:
+        '202':
+          description: Run queued
+  /bulk/runs:
+    post:
+      summary: Submit a bulk creation job
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkRunRequest'
+      responses:
+        '202':
+          description: Bulk job accepted
+  /boosting/configs:
+    post:
+      summary: Upsert a post boosting configuration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BoostingConfig'
+      responses:
+        '200':
+          description: Config stored
+components:
+  schemas:
+    AutomationRule:
+      type: object
+      required: [name, scope, schedule, filters, customMetrics, actions, dryRun]
+      properties:
+        name:
+          type: string
+        scope:
+          type: object
+          required: [level, ids]
+          properties:
+            level:
+              type: string
+              enum: [account, campaign, ad_set, ad]
+            ids:
+              type: array
+              items:
+                type: string
+        schedule:
+          type: object
+          required: [cron]
+          properties:
+            cron:
+              type: string
+        filters:
+          type: array
+          items:
+            oneOf:
+              - type: object
+                required: [metric, op, value, window]
+                properties:
+                  metric:
+                    type: string
+                  op:
+                    type: string
+                    enum: ['<', '<=', '>', '>=', '==', '!=']
+                  value:
+                    type: number
+                  window:
+                    type: string
+              - type: object
+                required: [left, op, right]
+                properties:
+                  left:
+                    type: string
+                  op:
+                    type: string
+                    enum: ['<', '<=', '>', '>=', '==', '!=']
+                  right:
+                    type: string
+        customMetrics:
+          type: array
+          items:
+            type: object
+            required: [name, expr]
+            properties:
+              name:
+                type: string
+              expr:
+                type: string
+              source:
+                type: string
+                enum: [formula, google_sheet]
+        actions:
+          type: array
+          items:
+            type: object
+            required: [type]
+            properties:
+              type:
+                type: string
+              value:
+                type: number
+              cap:
+                type: number
+              message:
+                type: string
+              channelId:
+                type: string
+        dryRun:
+          type: boolean
+    RuleRunLog:
+      type: object
+      properties:
+        id:
+          type: string
+        ruleId:
+          type: string
+        startedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [pending, success, error]
+        matchedEntities:
+          type: array
+          items:
+            type: string
+        notes:
+          type: array
+          items:
+            type: string
+    BulkRunRequest:
+      type: object
+      required: [template]
+      properties:
+        template:
+          $ref: '#/components/schemas/BulkTemplate'
+        attachRuleIds:
+          type: array
+          items:
+            type: string
+    BulkTemplate:
+      type: object
+      properties:
+        names:
+          type: array
+          items:
+            type: string
+        utm:
+          type: string
+        titles:
+          type: array
+          items:
+            type: string
+        bodies:
+          type: array
+          items:
+            type: string
+        creatives:
+          type: array
+          items:
+            type: string
+        audiences:
+          type: array
+          items:
+            type: string
+        placements:
+          type: array
+          items:
+            type: string
+    BoostingConfig:
+      type: object
+      required: [name, objectives, thresholds, audiences, budget]
+      properties:
+        name:
+          type: string
+        objectives:
+          type: array
+          items:
+            type: string
+        thresholds:
+          type: object
+          additionalProperties:
+            type: number
+        audiences:
+          type: array
+          items:
+            type: object
+            required: [id, type, name]
+            properties:
+              id:
+                type: string
+              type:
+                type: string
+                enum: [custom, saved, lookalike]
+              name:
+                type: string
+        budget:
+          type: object
+          required: [daily, durationDays]
+          properties:
+            daily:
+              type: number
+            durationDays:
+              type: number

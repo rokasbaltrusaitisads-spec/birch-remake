@@ -1,0 +1,18 @@
+{
+  "name": "Creative fatigue guard",
+  "description": "Duplicate top ads into fresh ad sets when frequency spikes",
+  "rule": {
+    "name": "Creative fatigue guard",
+    "scope": { "level": "ad", "ids": ["*"] },
+    "schedule": { "cron": "0 */6 * * *" },
+    "filters": [
+      { "metric": "frequency", "op": ">", "value": 5, "window": "7d" },
+      { "metric": "ctr", "op": "<", "value": 0.8, "window": "7d" }
+    ],
+    "customMetrics": [],
+    "actions": [
+      { "type": "duplicate", "destination": "new_ad_set" }
+    ],
+    "dryRun": true
+  }
+}
