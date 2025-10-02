@@ -3,6 +3,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 
 const PORT = Number(process.env.PORT || 4173);
+const HOST = process.env.HOST || "0.0.0.0";
 const rootDir = path.resolve("preview");
 
 const MIME_TYPES = new Map([
@@ -49,8 +50,9 @@ const server = createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
-  const url = `http://localhost:${PORT}`;
+server.listen(PORT, HOST, () => {
+  const resolvedHost = HOST === "0.0.0.0" ? "localhost" : HOST;
+  const url = `http://${resolvedHost}:${PORT}`;
   console.log(`Birch static preview available at ${url}`);
   console.log("Press Ctrl+C to stop the preview server.");
 });

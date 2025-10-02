@@ -31,6 +31,15 @@ pnpm install
 
 Copy `.env.example` to `.env` and populate the variables.
 
+### GitHub Codespaces
+
+Open the repository in [GitHub Codespaces](https://github.com/features/codespaces) to get a ready-to-run workspace. The provided
+devcontainer image installs Node.js, pnpm, and Docker tooling automatically. On the first start it runs `pnpm install` and boots
+the static preview server, forwarding it on port **4173**. Codespaces will open the preview in a browser tab so you can explore
+the mocked Birch experience immediately. Logs for the background preview process live at `.devcontainer/.preview.log`.
+
+The same port mappings also expose the full-stack services (Next.js on 3000, NestJS on 3333) when you launch them manually.
+
 ### Zero-Install UI Preview
 
 If you simply want to click through the Birch experience without installing Node, Docker, or pnpm,
